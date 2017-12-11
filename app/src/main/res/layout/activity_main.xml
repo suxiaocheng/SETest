@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.desay.uidq0655.setest.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/jni_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="JNI test" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Open" />
+
+            <Button
+                android:id="@+id/reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset" />
+
+            <Button
+                android:id="@+id/getatr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetAtr" />
+
+            <Button
+                android:id="@+id/close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Close" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/class_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Class test" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/openReader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Open Reader" />
+
+            <Button
+                android:id="@+id/closeReader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Close Reader" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/openSession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Open Session" />
+
+            <Button
+                android:id="@+id/closeSession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Close Session" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/openChannel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Open Channel" />
+
+            <Button
+                android:id="@+id/openBasicChannel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Open Basic Channel" />
+
+            <Button
+                android:id="@+id/getSelectResponse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="get select response" />
+
+            <Button
+                android:id="@+id/transmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="transmit" />
+
+            <Button
+                android:id="@+id/closeChannel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Close Channel" />
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
