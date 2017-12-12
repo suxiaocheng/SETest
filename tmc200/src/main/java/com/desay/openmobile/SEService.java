@@ -55,7 +55,7 @@ public class SEService {
     }
 
     public String getVersion() {
-        return "DesaySV-0.1";
+        return "DesaySV-0.2";
     }
 
     public interface CallBack {

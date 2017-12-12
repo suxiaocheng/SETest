@@ -135,6 +135,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.getAtrSession)
+    void getAtrSession() {
+        if (reader == null) {
+            Log.e(TAG, "reader is null");
+            return;
+        }
+        byte[] response = session.getATR();
+        Log.d(TAG, "Session getatr: " + Arrays.toString(response));
+    }
+
     @OnClick(R.id.closeSession)
     void closeSession() {
         if (reader == null) {
@@ -177,7 +187,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.transmit)
-    void transmit() {
+    void transmit(){
+        int iTestCount = 0;
         if (reader == null) {
             Log.e(TAG, "reader is null");
             return;
@@ -186,13 +197,22 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "session is being close");
             return;
         }
-        try {
-            byte[] response = channel.transmit(new byte[]{0x00, (byte) 0x84, 0x00, 0x00, 0x08});
-            if (response != null) {
-                Log.d(TAG, "transmit response: " + Arrays.toString(response));
+        while (iTestCount < 100000) {
+            try {
+                byte[] response = channel.transmit(new byte[]{0x00, (byte) 0x84, 0x00, 0x00, 0x08});
+                if (response != null) {
+                    Log.d(TAG, iTestCount + ": transmit response: " + Arrays.toString(response));
+                    if((response[8] != 0x90) && (response[9] != 0x0)) {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                break;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            iTestCount++;
         }
     }
 

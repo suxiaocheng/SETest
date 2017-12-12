@@ -43,7 +43,7 @@ public class Session {
                 throw new IllegalStateException("service session is null");
             } else {
                 lChannelList.clear();
-                byte[] response = getATR();
+                byte[] response = mSession.getATR();
                 if (response != null) {
                     isOpen = true;
                     return response;

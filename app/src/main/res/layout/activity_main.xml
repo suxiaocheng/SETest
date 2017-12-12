@@ -83,6 +83,12 @@
                 android:text="Open Session" />
 
             <Button
+                android:id="@+id/getAtrSession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="getAtr Session" />
+
+            <Button
                 android:id="@+id/closeSession"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
