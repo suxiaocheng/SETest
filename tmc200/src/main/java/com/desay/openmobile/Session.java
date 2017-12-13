@@ -25,6 +25,7 @@ public class Session {
     private boolean isOpen;
 
     private static byte[] bSelectChannel = {0x0, 0x70, 0x0, 0x0, 0x1};
+    private static byte[] bSelectAid = {0x0, (byte)0xa4, 0x04, 0x0, 0x00};
     private byte[] bResponseBackup;
 
     Session(Tmc200 session, Reader reader) {
@@ -184,13 +185,25 @@ public class Session {
                 throw new IllegalStateException("select channel command response error, phase0");
             }
             iCurrentChannel = response[0];
-            var1[0] = response[0];
         } else {
             iCurrentChannel = 0;
         }
 
-        var1[3] = var2;
-        response = mSession.transmit(var1);
+        byte[] cmd = new byte[bSelectAid.length+var1.length];
+        for(int i=0; i<bSelectAid.length; i++){
+            cmd[i] = bSelectAid[i];
+        }
+        for(int i=0; i<var1.length; i++){
+            cmd[i+bSelectAid.length] = var1[i];
+        }
+        cmd[0] |= iCurrentChannel;
+        cmd[3] = var2;
+        if(var1.length >= 255){
+            throw new IOException("aid length exceed 255->" + var1.length);
+        }
+        cmd[4] = (byte)var1.length;
+
+        response = mSession.transmit(cmd);
         bResponseBackup = response;
         if ((response[0] != (byte)0x90) && (response[0] != (byte)0x00)) {
             Log.e(TAG, "select channel aid response error, phase1");

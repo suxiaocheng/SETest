@@ -96,6 +96,7 @@ public class Channel {
             } else {
                 Object var2 = this.mLock;
                 synchronized (this.mLock) {
+                    command[0] = (byte)((command[0] & ~0x03) | channel_num);
                     byte[] response = this.mChannel.transmit(command);
                     if(response == null){
                         throw new IOException("channel transmit fail");
