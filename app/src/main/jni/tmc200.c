@@ -180,6 +180,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_desay_openmobile_Tmc200_transmit
     } else {
         len = get_apdu_length();
         ret_cmd = get_apdu();
+        LOGD("Response:");
         dump_memory(ret_cmd, len);
 
         bytes = (*env)->NewByteArray(env, len);
@@ -204,6 +205,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_desay_openmobile_Tmc200_reset
     len = CARDreset();
     if(len > 0) {
         response = get_art();
+        LOGD("Reset:");
         dump_memory(response, len);
         bytes = (*env)->NewByteArray(env, len);
         if (bytes != 0) {
@@ -227,6 +229,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_desay_openmobile_Tmc200_getATR
     len = CARDreset();
     if(len > 0) {
         response = get_art();
+        LOGD("GetATR:");
         dump_memory(response, len);
         bytes = (*env)->NewByteArray(env, len);
         if (bytes != 0) {
