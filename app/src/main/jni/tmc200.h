@@ -31,6 +31,7 @@ typedef struct{
 
 #define UART_DEV	"/dev/ttyS6"
 #define RST_GPIO	"79"
+#define PWR_GPIO	"114"
 
 #define REG_BASE   (0x4A003000)
 #define REG_SIZE        1024*4
@@ -41,5 +42,6 @@ typedef struct {
 } tmc200_t;
 
 int reset_config_status(int status);
+int pwr_config_status(int status);
 
 #endif //SMARTCARD_TMC200_H

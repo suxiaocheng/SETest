@@ -10,10 +10,12 @@
 #define PWM_DIR        "/sys/class/pwm/pwmchip2/"
 #define PWM_CHANNEL    "pwm0/"
 
+#define PWR_DIR         "/sys/class/gpio/gpio"PWR_GPIO
+
 config_device_t config_device_list[] = {
         {PWM_DIR"export",                  "0",   TYPE_STR},
-        {PWM_DIR PWM_CHANNEL "period",     "280", TYPE_STR},
-        {PWM_DIR PWM_CHANNEL "duty_cycle", "140", TYPE_STR},
+        {PWM_DIR PWM_CHANNEL "period",     "270", TYPE_STR},
+        {PWM_DIR PWM_CHANNEL "duty_cycle", "135", TYPE_STR},
         {PWM_DIR PWM_CHANNEL "enable",     "1",   TYPE_STR},
         {"/sys/class/gpio/export",         RST_GPIO,        TYPE_STR},
         {"/sys/class/gpio/gpio"RST_GPIO"/direction", "out", TYPE_STR},
@@ -35,6 +37,26 @@ config_device_t tmc200_reset_low[] = {
 
 config_device_t tmc200_reset_high[] = {
         {"/sys/class/gpio/gpio"RST_GPIO"/value", "1",  TYPE_STR},
+        {NULL,                                   NULL, TYPE_NONE}
+};
+
+config_device_t tmc200_pwr_en[] = {
+        {"/sys/class/gpio/export", PWR_GPIO,  TYPE_STR},
+        {NULL,                                   NULL, TYPE_NONE}
+};
+
+config_device_t tmc200_pwr_dir[] = {
+        {"/sys/class/gpio/gpio"PWR_GPIO"/direction", "out",  TYPE_STR},
+        {NULL,                                   NULL, TYPE_NONE}
+};
+
+config_device_t tmc200_pwr_low[] = {
+        {"/sys/class/gpio/gpio"PWR_GPIO"/value", "0",  TYPE_STR},
+        {NULL,                                   NULL, TYPE_NONE}
+};
+
+config_device_t tmc200_pwr_high[] = {
+        {"/sys/class/gpio/gpio"PWR_GPIO"/value", "1",  TYPE_STR},
         {NULL,                                   NULL, TYPE_NONE}
 };
 
@@ -109,9 +131,48 @@ int reset_config_status(int status) {
     return ret;
 }
 
+int pwr_config_status(int status) {
+    int ret = 0;
+    config_device_t *pconf;
+    if (status == 0) {
+        pconf = tmc200_pwr_low;
+    } else {
+        pconf = tmc200_pwr_high;
+    }
+    ret = write_file_config(pconf->path, pconf->val, pconf->type);
+    if (ret != 0) {
+        return ret;
+    }
+
+    return ret;
+}
+
 int check_device_path(void) {
     int ret = 0;
     struct stat fstat;
+    config_device_t *pconf;
+
+    ret = stat(PWR_DIR, &fstat);
+    if(ret < 0){
+        pconf = &tmc200_pwr_en[0];
+        ret = write_file_config(pconf->path, pconf->val, pconf->type);
+        if (ret != 0) {
+            return ret;
+        }
+
+        pconf = &tmc200_pwr_dir[0];
+        ret = write_file_config(pconf->path, pconf->val, pconf->type);
+        if (ret != 0) {
+            return ret;
+        }
+
+        pconf = &tmc200_pwr_high[0];
+        ret = write_file_config(pconf->path, pconf->val, pconf->type);
+        if (ret != 0) {
+            return ret;
+        }
+    }
+
     ret = stat(PWM_DIR, &fstat);
     if (ret < 0) {
         err("PWM is not enable in dts\n");
@@ -122,7 +183,6 @@ int check_device_path(void) {
         err("PWM %s is exist\n", PWM_CHANNEL);
         return ret;
     }
-    config_device_t *pconf;
     for (pconf = config_device_list; pconf->path != NULL; pconf++) {
         ret = write_file_config(pconf->path, pconf->val, pconf->type);
         if (ret != 0) {
@@ -153,10 +213,12 @@ JNIEXPORT jboolean JNICALL Java_com_desay_openmobile_Tmc200_open
     int ret;
     if (check_device_path() == 0) {
         init_uart(UART_DEV);
+        CARDreset(1);
         if (ret < 0) {
             return (jboolean)0;
         }
     }
+
     return (jboolean)1;
 }
 
@@ -202,7 +264,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_desay_openmobile_Tmc200_reset
     char *response;
     int len = 0;
 
-    len = CARDreset();
+    len = CARDreset(1);
     if(len > 0) {
         response = get_art();
         LOGD("Reset:");
@@ -226,7 +288,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_desay_openmobile_Tmc200_getATR
     char *response;
     int len = 0;
 
-    len = CARDreset();
+    len = CARDreset(0);
     if(len > 0) {
         response = get_art();
         LOGD("GetATR:");

@@ -26,7 +26,7 @@ uint32_t get_apdu_length(void);
 uint8_t *get_apdu(void);
 void set_apdu_buf(uint8_t *buf, uint32_t count);
 uint8_t *get_art(void);
-uint8_t CARDreset(void);
+uint8_t CARDreset(uint32_t type);
 uint16_t trans_t0(void);
 
 #endif //SMARTCARD_7816_H
